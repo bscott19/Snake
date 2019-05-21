@@ -2,7 +2,7 @@
 
 #include <MeggyJrSimple.h>
 
-int x, y;
+//int x, y;
 
 int appleX = random(8);
 int appleY = random(8);
@@ -11,32 +11,50 @@ boolean gotApple = false;
 
 int heading = 270;
 
+// Variables for the array
+
+int marker = 0;
+
+struct Point {
+  int x;
+  int y;
+};
+
+Point snakeArray[64];
 //------
 
 void setup()
 {
   MeggyJrSimpleSetup();
-  x = 3;
-  y = 3;
+  snakeArray[marker].x = 3;
+  snakeArray[marker].y = 3;
 }
 
 void loop()
 {
-  DrawDot();
+  drawSnake();
   SpawnApple();
   DisplaySlate();
   CheckButtonsDown();
+  
 //  delay(200);
   MovePlayer();
   ClearSlate();
+  updateSnake();
 }
 
 //------
 
-void DrawDot()
+void drawSnake() {
+  for (int i = 0; i < marker+1; i++) {
+    DrawPx(snakeArray[i].x, snakeArray[i].y, 1);
+  }
+}
+
+/* void DrawDot()
 {
   DrawPx(x,y,FullOn);
-}
+} */
 
 void MovePlayer()
 {
@@ -59,44 +77,47 @@ void MovePlayer()
   }
   if(heading == 360)
   {
-    y++;
+    snakeArray[marker].y++;
   }
   if(heading == 90)
   {
-    x++;
+    snakeArray[marker].x++;
   }
   if(heading == 180)
   {
-    y--;
+    snakeArray[marker].y--;
   }
   if(heading == 270)
   {
-    x--;
+    snakeArray[marker].x--;
   }
-    if(x < 0)
+  if(snakeArray[marker].x < 0)
   {
-    x = 7;
+    snakeArray[marker].x = 7;
   }
-  if(x > 7)
+  if(snakeArray[marker].x > 7)
   {
-  x = 0;
+  snakeArray[marker].x = 0;
   }
-  if (y > 7)
+  if (snakeArray[marker].y > 7)
   {
-    y = 0;
+    snakeArray[marker].y = 0;
   }
-  if (y < 0)
+  if (snakeArray[marker].y < 0)
   {
-    y = 7;
+    snakeArray[marker].y = 7;
   }
 }
 
 void SpawnApple()
 {
   DrawPx(appleX,appleY,4);
-  if (x == appleX && y == appleY)
+  if (snakeArray[marker].x == appleX && snakeArray[marker].y == appleY)
   {
     gotApple=true;
+    marker++;
+    snakeArray[marker].x = appleX;
+    snakeArray[marker].y = appleY;
   }
   if (gotApple == true)
   {
@@ -106,6 +127,14 @@ void SpawnApple()
   }
 }
 
+void updateSnake()
+{
+   for (int i = marker - 1; i > 0; i--)
+  {
+      snakeArray[i].x = snakeArray[i-1].x;
+      snakeArray[i].y = snakeArray[i-1].y;
+  }
+}
 
 /*
 void RespawnApple()
