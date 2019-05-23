@@ -6,6 +6,7 @@
 
 int appleX = random(8);
 int appleY = random(8);
+int color;
 
 boolean gotApple = false;
 
@@ -21,6 +22,7 @@ struct Point {
 };
 
 Point snakeArray[64];
+
 //------
 
 void setup()
@@ -28,37 +30,33 @@ void setup()
   MeggyJrSimpleSetup();
   snakeArray[marker].x = 3;
   snakeArray[marker].y = 3;
+  color = 1;
 }
 
 void loop()
 {
   drawSnake();
-  SpawnApple();
   DisplaySlate();
-  CheckButtonsDown();
-  
-//  delay(200);
-  MovePlayer();
+  delay(200);
   ClearSlate();
   updateSnake();
+  CheckButtonsPress();
+// Update snake head  
+  SpawnApple();
+  MovePlayer();
 }
 
 //------
 
 void drawSnake() {
-  for (int i = 0; i < marker+1; i++) {
-    DrawPx(snakeArray[i].x, snakeArray[i].y, 1);
+  for (int i = 0; i < marker+1; i++)
+  {
+    DrawPx(snakeArray[i].x, snakeArray[i].y, color);
   }
 }
 
-/* void DrawDot()
-{
-  DrawPx(x,y,FullOn);
-} */
-
 void MovePlayer()
 {
-  delay(300);
   if (Button_Up)
   {
     heading = 360;
@@ -136,18 +134,32 @@ void updateSnake()
   }
 }
 
-/*
-void RespawnApple()
+void changeSnakeColor()
 {
-  if (x == appleX && y == appleY)
+  if (Button_A)
   {
-    gotApple=true;
+    color++;
+    Tone_Start(1500,100);
+    delay(110);
+    Tone_Start(1700,80);
   }
-  if (gotApple == true)
+  if (Button_B)
   {
-    appleX = random(8);
-    appleY = random(8);
-    gotApple == false;
+    color--;
+    Tone_Start(1500,100);
+    delay(100);
+    Tone_Start(1300,80);
+  }
+  if (color>14)
+  {
+    color=1;
+  }
+  if (color<1)
+  {
+    color=14;
+  }
+  if (color==4)
+  {
+    color=5;
   }
 }
-*/
