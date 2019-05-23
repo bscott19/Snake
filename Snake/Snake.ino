@@ -16,7 +16,8 @@ int heading = 270;
 
 int marker = 0;
 
-struct Point {
+struct Point
+{
   int x;
   int y;
 };
@@ -48,7 +49,8 @@ void loop()
 
 //------
 
-void drawSnake() {
+void drawSnake()
+{
   for (int i = 0; i < marker+1; i++)
   {
     DrawPx(snakeArray[i].x, snakeArray[i].y, color);
